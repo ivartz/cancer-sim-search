@@ -15,14 +15,14 @@ nthreads=$(($(nproc)/2))
 
 # Min and max displacement magnitude and resolution
 mindisp=1
-maxdisp=6
-resdisp=4
+maxdisp=8
+resdisp=25
 
 # Min and max brain coverage x and resolution
 # x=1-y, y element [0,1]; 0=largest brain coverage
 minbc=0
-maxbc=1
-resbc=2
+maxbc=0.7
+resbc=25
 
 numsims=$(($resdisp * $resbc))
 
@@ -104,5 +104,5 @@ echo "$(createparamsfile "${dispchunk[*]}" "${bcovchunk[*]}")" > $outdir/params-
 # Start all threads in parallel
 for ((i=1; i<=$currentthread; ++i)); do
     cmd="bash run-thread.sh $outdir/params-${i}.txt $outdir/models-${i} &"
-    echo $cmd
+    eval $cmd
 done
