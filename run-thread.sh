@@ -10,7 +10,7 @@ inputimg="/mnt/HDD3TB/derivatives/cancer-sim-example/derivatives/1-T1c.nii.gz"
 brainmask="/mnt/HDD3TB/derivatives/cancer-sim-example/derivatives/1-brainmask.nii.gz"
 tumormask="/mnt/HDD3TB/derivatives/cancer-sim-example/derivatives/1-tumormask.nii.gz"
 
-# MRI to assess the simulation (secon time-point MRI)
+# MRI to assess the simulation (second time-point MRI)
 measureimg="/mnt/HDD3TB/derivatives/cancer-sim-example/derivatives/reg/2-T1c-reg.nii.gz"
 
 bash $cancersimdir/generate-models.sh $param $inputimg $tumormask $brainmask $mdir
