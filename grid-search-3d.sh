@@ -1,5 +1,5 @@
 : '
-bash grid-search-2d.sh
+bash grid-search-3d.sh
 '
 
 scriptdir=$(dirname $0)
@@ -11,7 +11,8 @@ outdir="/mnt/HDD3TB/derivatives/cancer-sim-example/large-grid-search"
 
 # Number of CPU threads to use. Will create an additional thread if 
 # necessary for processing remaining data
-nprocs=$(($(nproc)/3))
+nprocs=$(($(nproc)/2))
+#nprocs=6
 
 # 3D grid search space (two first dimensions make up the first spatial dimension in the 3D grid search)
 # Perlin max and min resolution
@@ -45,6 +46,8 @@ if [[ $nprocs -gt $numsims ]]; then
     echo "The number of configurations to search is smaller than the number of threads specified. Setting numbers of threads to use as the number of configurations"
     nprocs=$numsims
 fi
+
+echo "Number of models to search:" $numsims
 
 createparamsfile(){
     # Create <procs> number of parameter configuration files for independent runs
@@ -101,14 +104,14 @@ i=0
 pabsschunk=()
 presschunk=()
 bcovchunk=()
-displchunk=()
+dispchunk=()
+iteration=1
 for pabs in ${pabss[*]}; do
     if (( $(echo "$pabs == 0" | bc -l) )); then
         pressel=(${press[0]})
     else
         pressel=(${press[*]})
     fi
-    #echo ${pressel[*]}
     for pres in ${pressel[*]}; do
         for bcov in ${bcovs[*]}; do
             for disp in ${disps[*]}; do
@@ -117,29 +120,28 @@ for pabs in ${pabss[*]}; do
                 pabsschunk+=($pabs)
                 presschunk+=($pres)
                 bcovchunk+=($bcov)
-                displchunk+=($disp)
+                dispchunk+=($disp)
                 i=$(($i+1))
+                #echo "iteration" $iteration
+                #iteration=$(($iteration+1))
                 # Keep track of which thread to work on
-                if [[ $(($i % $chunksize)) -eq 0 ]]; then
+                if [[ $(($i % $chunksize)) -eq 0 || $disp == ${disps[-1]} || $bcov == ${bcovs[-1]} || $pres == ${pressel[-1]} || $pabs == ${pabss[-1]} ]]; then
                     # Done with current thread
                     # Create uniqie arrays containing the chunk of parameters
-                    
                     # Reduce parameters in outer loops to not have duplicates
-                    pabsschunk=($(echo "${pabsschunk[@]}" | tr " " "\n" | uniq | tr "\n" " "))
-                    presschunk=($(echo "${presschunk[@]}" | tr " " "\n" | uniq | tr "\n" " "))
-                    bcovchunk=($(echo "${bcovchunk[@]}" | tr " " "\n" | uniq | tr "\n" " "))
-                    # Reduction for the innermost loop not necessary
-                    #dispchunk=($(echo "${dispchunk[@]}" | tr " " "\n" | uniq | tr "\n" " "))
+                    pabsschunk=($(echo "${pabsschunk[@]}" | tr " " "\n" | awk '!x[$0]++' | tr "\n" " "))
+                    presschunk=($(echo "${presschunk[@]}" | tr " " "\n" | awk '!x[$0]++' | tr "\n" " "))
+                    bcovchunk=($(echo "${bcovchunk[@]}" | tr " " "\n" | awk '!x[$0]++' | tr "\n" " "))
+                    dispchunk=($(echo "${dispchunk[@]}" | tr " " "\n" | awk '!x[$0]++' | tr "\n" " "))
                     # Create and save the params file for the chunk of configurations
-                    echo "$(createparamsfile "${displchunk[*]}" "${bcovchunk[*]}" "${presschunk[*]}" "${pabsschunk[*]}")" > $outdir/params-${currentthread}.txt
-                    #createparamsfile "${displchunk[*]}" "${bcovchunk[*]}" "${pabsschunk[*]}" "${presschunk[*]}"
+                    echo "$(createparamsfile "${dispchunk[*]}" "${bcovchunk[*]}" "${presschunk[*]}" "${pabsschunk[*]}")" > $outdir/params-${currentthread}.txt
+                    #createparamsfile "${dispchunk[*]}" "${bcovchunk[*]}" "${presschunk[*]}" "${pabsschunk[*]}"
                     #echo "----------------"
-                    
                     # Reset chunk arrays
                     pabsschunk=()
                     presschunk=()
                     bcovchunk=()
-                    displchunk=()
+                    dispchunk=()
                     # Increment thread count
                     currentthread=$(($currentthread + 1))
                 fi
@@ -152,29 +154,33 @@ if [[ ${#pabsschunk[*]} -gt 0 && ${#presschunk[*]} -gt 0 && ${#bcovchunk[*]} -gt
     # Create and save the params file for the rest chunk of configurations
     # Create uniqie arrays containing the chunk of parameters
     # Reduce parameters in outer loops to not have duplicates
-    pabsschunk=($(echo "${pabsschunk[@]}" | tr " " "\n" | uniq | tr "\n" " "))
-    presschunk=($(echo "${presschunk[@]}" | tr " " "\n" | uniq | tr "\n" " "))
-    bcovchunk=($(echo "${bcovchunk[@]}" | tr " " "\n" | uniq | tr "\n" " "))
-    # Reduction for the innermost loop not necessary
-    #dispchunk=($(echo "${dispchunk[@]}" | tr " " "\n" | uniq | tr "\n" " "))
+    pabsschunk=($(echo "${pabsschunk[@]}" | tr " " "\n" | awk '!x[$0]++' | tr "\n" " "))
+    presschunk=($(echo "${presschunk[@]}" | tr " " "\n" | awk '!x[$0]++' | tr "\n" " "))
+    bcovchunk=($(echo "${bcovchunk[@]}" | tr " " "\n" | awk '!x[$0]++' | tr "\n" " "))
+    dispchunk=($(echo "${dispchunk[@]}" | tr " " "\n" | awk '!x[$0]++' | tr "\n" " "))
     #echo "rest configuration"
-    echo "$(createparamsfile "${displchunk[*]}" "${bcovchunk[*]}" "${presschunk[*]}" "${pabsschunk[*]}")" > $outdir/params-${currentthread}.txt
-    #createparamsfile "${displchunk[*]}" "${bcovchunk[*]}" "${pabsschunk[*]}" "${presschunk[*]}"
+    echo "$(createparamsfile "${dispchunk[*]}" "${bcovchunk[*]}" "${presschunk[*]}" "${pabsschunk[*]}")" > $outdir/params-${currentthread}.txt
+    #createparamsfile "${dispchunk[*]}" "${bcovchunk[*]}" "${pabsschunk[*]}" "${presschunk[*]}"
 fi
-
-# Start all processes
-for ((i=1; i<$currentthread; ++i)); do
-    cmd="bash $scriptdir/run-thread.sh $outdir/params-${i}.txt $outdir/models-${i} &"
-    eval $cmd
-    pids[$i]=$!
+exit
+k=1
+while [[ $k -lt $currentthread ]]; do
+    # Start all processes
+    for ((i=$k; i<$(($k + $nprocs)); ++i)); do
+        pf=$outdir/params-${i}.txt
+        if [[ -f $pf ]]; then
+            cmd="bash $scriptdir/run-thread.sh $pf $outdir/models-${i} &"
+            eval $cmd
+            pids[$i]=$!
+        fi
+    done
+    # Wait for all process to finish
+    for pid in ${pids[*]} ; do
+        wait $pid
+    done
+    #
+    k=$(($k + $nprocs))
 done
-#: '
-# Wait for all process to finish
-for pid in ${pids[*]} ; do
-    wait $pid
-done 
-
 # Collect grid results from cross-correlation assessment
 cmd="bash $scriptdir/collect-cc.sh > $outdir/results-cc.txt"
 eval $cmd
-#'
