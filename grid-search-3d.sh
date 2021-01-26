@@ -1,22 +1,28 @@
 : '
-bash grid-search-3d.sh
-'
+bash grid-search-3d.sh <inputimg> <brainmask> <tumormask> <measureimg> <outdir>
+
 inputimg="/mnt/HDD3TB/derivatives/cancer-sim-example/derivatives/1-T1c.nii.gz"
 brainmask="/mnt/HDD3TB/derivatives/cancer-sim-example/derivatives/1-brainmask.nii.gz"
 tumormask="/mnt/HDD3TB/derivatives/cancer-sim-example/derivatives/1-tumormask.nii.gz"
 measureimg="/mnt/HDD3TB/derivatives/cancer-sim-example/derivatives/reg/2-T1c-reg.nii.gz"
-
-scriptdir=$(dirname $0)
-
 # Output directory of models.
 # Also used to save params.txt files for use in each process
-#paramsdir=$1
 outdir="/mnt/HDD3TB/derivatives/cancer-sim-example/large-grid-search"
+'
+scriptdir=$(dirname $0)
+
+inputimg=$1
+brainmask=$2
+tumormask=$3
+measureimg=$4
+# Output directory of models.
+# Also used to save params.txt files for use in each process
+outdir=$5
 
 # Number of CPU processes to use. Will create an additional process if 
 # necessary for processing remaining data
-nprocs=$(($(nproc)/2))
-#nprocs=6
+#nprocs=$(($(nproc)/2))
+nprocs=6
 
 # 3D grid search space (two first dimensions make up the first spatial dimension in the 3D grid search)
 
