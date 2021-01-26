@@ -2,7 +2,7 @@
 bash collect-cc
 '
 
-outdir="/mnt/HDD3TB/derivatives/cancer-sim-example/large-grid-search"
+outdir=$1
 
 nmodelparts=$(ls -d $outdir/*/ | wc -l)
 
