@@ -21,21 +21,21 @@ outdir=$5
 
 # Number of CPU processes to use. Will create an additional process if 
 # necessary for processing remaining data
-nprocs=$(($(nproc)/3))
-#nprocs=5
+#nprocs=$(($(nproc)/3))
+nprocs=6
 
 # 2D grid search space
 
 # Min and max displacement magnitude and resolution
-mindisp=1
-maxdisp=7
-resdisp=10
+mindisp=2
+maxdisp=9
+resdisp=6
 
 # Min and max brain coverage x and resolution
 # x=1-y, y element [0,1]; 0=largest brain coverage
-minbc=0
-maxbc=0.4
-resbc=10
+minbc=0.01
+maxbc=0.7
+resbc=6
 
 numsims=$(($resdisp * $resbc))
 
