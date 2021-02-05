@@ -1,5 +1,5 @@
 : '
-bash search-timestep.sh <dataset> <first examination folder> <second examination folder> <outdir>
+bash search-timestep.sh <dataset> <first examination folder> <second examination folder> <outdir> <grid search dimensions>
 '
 scriptdir=$(dirname $0)
 
@@ -14,6 +14,8 @@ second=$3
 
 #outdir="/mnt/HDD3TB/derivatives/cancer-sim-search-SAILOR_PROCESSED_MNI-01-02"
 outdir=$4
+
+ndim=$5
 
 readarray -t firstdirs < <(find $dataset -type d -name $first | sort)
 readarray -t seconddirs < <(find $dataset -type d -name $second | sort)
@@ -40,7 +42,7 @@ do
     patientoutdir=$outdir/$patientoutfolder   
     mkdircmd="mkdir -p $patientoutdir"
     eval $mkdircmd
-    cmd="bash $scriptdir/grid-search-3d.sh $firstimg $brainmask $tumormask $secondimg $patientoutdir"
+    cmd="bash $scriptdir/grid-search-${ndim}d.sh $firstimg $brainmask $tumormask $secondimg $patientoutdir"
     eval $cmd
 done
 

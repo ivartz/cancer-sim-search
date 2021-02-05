@@ -16,6 +16,7 @@ emask=ellipsoid-mask.nii.gz
 iemask=interp-ellipsoid-mask.nii.gz
 igaussian=interp-gaussian.nii.gz
 ioemask=interp-outer-ellipsoid-mask.nii.gz
+normmask=normal-ellipsoid-mask.nii.gz
 par=params.txt
 
 t1cs=()
@@ -38,9 +39,10 @@ emasks=()
 iemasks=()
 igaussians=()
 ioemasks=()
+normmasks=()
 paramsfiles=()
 
-echo "The best fitted simulations are"
+echo "The most fit simulations are"
 
 for bdir in ${bestsimsdirs[*]}
 do
@@ -55,6 +57,7 @@ do
     iemasks+=($ioemaskdir/$iemask)
     igaussians+=($ioemaskdir/$igaussian)
     ioemasks+=($ioemaskdir/$ioemask)
+    normmasks+=($ioemaskdir/$normmask)
     
     paramsfiles+=($ioemaskdir/$par)
 done
@@ -72,16 +75,17 @@ echo ${paramsfiles[*]}
 
 echo ----
 
-echo "best fit fields"
+echo "most fit fields"
 echo ${fields[*]}
 #echo "warps"
 #echo ${warps[*]}
 #echo "masks"
 #echo ${ioemasks[*]}
 
+
 echo ----
 
-
+: '
 echo "aliza ${t1cs[*]} ${warps[*]} &"
 
 echo ----
@@ -100,13 +104,16 @@ echo "aliza ${iemasks[*]} &"
 echo "aliza ${igaussians[*]} &"
 echo "aliza ${ioemasks[*]} &"
 
-echo ----sd
+echo ----
 echo "itksnap -g ${t1cs[0]} -o ${t1cs[*]:1:${#t1cs[*]}} &"
 echo "itksnap -g ${t2s[0]} -o ${t2s[*]:1:${#t2s[*]}} &"
 echo "itksnap -g ${flairs[0]} -o ${flairs[*]:1:${#flairs[*]}} &"
+'
 echo ----
 echo "itksnap -g ${fields[0]} -o ${fields[*]:1:${#fields[*]}} &"
 echo "itksnap -g ${negfields[0]} -o ${negfields[*]:1:${#negfields[*]}} &"
+
+: '
 echo "itksnap -g ${warps[0]} -o ${warps[*]:1:${#warps[*]}} &"
 echo ----
 echo "itksnap -g ${dbmasks[0]} -o ${dbmasks[*]:1:${#dbmasks[*]}} &"
@@ -115,22 +122,41 @@ echo "itksnap -g ${iemasks[0]} -o ${iemasks[*]:1:${#iemasks[*]}} &"
 echo "itksnap -g ${igaussians[0]} -o ${igaussians[*]:1:${#igaussians[*]}} &"
 echo "itksnap -g ${ioemasks[0]} -o ${ioemasks[*]:1:${#ioemasks[*]}} &"
 
+echo ----
+'
+
 # Merge results
 #: '
 cmd="fslmerge -t $patientsimdir/dbmask.nii.gz ${dbmasks[*]}"
+echo $cmd
 eval $cmd
 cmd="fslmerge -t $patientsimdir/emask.nii.gz ${emasks[*]}"
+echo $cmd
 eval $cmd
 cmd="fslmerge -t $patientsimdir/iemask.nii.gz ${iemasks[*]}"
+echo $cmd
+eval $cmd
+cmd="fslmerge -t $patientsimdir/igaussian.nii.gz ${igaussians[*]}"
+echo $cmd
+eval $cmd
+cmd="fslmerge -t $patientsimdir/ioemask.nii.gz ${ioemasks[*]}"
+echo $cmd
+eval $cmd
+cmd="fslmerge -t $patientsimdir/normmask.nii.gz ${normmasks[*]}"
+echo $cmd
 eval $cmd
 cmd="fslmaths $patientsimdir/dbmask.nii.gz -add $patientsimdir/emask.nii.gz $patientsimdir/sim.nii.gz"
+echo $cmd
 eval $cmd
 cmd="fslmaths $patientsimdir/sim.nii.gz -add $patientsimdir/iemask.nii.gz $patientsimdir/sim.nii.gz"
+echo $cmd
 eval $cmd
 cmd="fslmerge -t $patientsimdir/true.nii.gz ${t1cs[*]:1:${#t1cs[*]}}"
+echo $cmd
 eval $cmd
 cmd="fslmerge -t $patientsimdir/synth.nii.gz ${warps[*]}"
+echo $cmd
 eval $cmd
 echo ----
-echo "itksnap -g $patientsimdir/true.nii.gz -o $patientsimdir/synth.nii.gz $patientsimdir/sim.nii.gz"
+echo "itksnap -g $patientsimdir/true.nii.gz -o $patientsimdir/synth.nii.gz $patientsimdir/sim.nii.gz $patientsimdir/normmasks.nii.gz"
 #'

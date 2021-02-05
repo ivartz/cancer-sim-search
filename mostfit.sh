@@ -2,7 +2,7 @@ scriptdir=$(dirname $0)
 
 patientsimdir=$1
 
-readarray -t bestsimsdirs < <(bash $scriptdir/best-fit-sims.sh $patientsimdir)
+readarray -t bestsimsdirs < <(bash $scriptdir/mostfit-sims.sh $patientsimdir)
 
 fname=interp-field-*mm.nii.gz
 wname=warped.nii.gz
@@ -14,11 +14,11 @@ bwarps=()
 bioemasks=()
 paramsfiles=()
 
-echo "The best fitted simulations are"
+#echo "The best fitted simulations are"
 
 for bdir in ${bestsimsdirs[*]}
 do
-    echo $bdir
+    #echo $bdir
     bioemaskdir=$(dirname $bdir)
     bfields+=($bdir/$fname)
     bwarps+=($bdir/$wname)
@@ -34,6 +34,7 @@ then
     exit
 fi
 
+: '
 echo "params"
 echo ${paramsfiles[*]}
 
@@ -55,4 +56,4 @@ echo ----
 echo "itksnap -g ${bfields[0]} -o ${bfields[*]:1:${#bfields[*]}} &"
 echo "itksnap -g ${bwarps[0]} -o ${bwarps[*]:1:${#bwarps[*]}} &"
 echo "itksnap -g ${bioemasks[0]} -o ${bioemasks[*]:1:${#bioemasks[*]}} &"
-
+'

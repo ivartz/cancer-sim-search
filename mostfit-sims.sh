@@ -13,7 +13,7 @@ do
     #echo "python3 $scriptdir/highest-mag-thr.py $f"
     readarray -t a < <(python3 $scriptdir/highest-mag-thr.py $f)
     num=${#a[@]}
-    for ((i=0; i<$((num-2)); ++i))
+    for ((i=0; i<$((num-1)); ++i))
     do
         item=${a[i]}
         b=($item)
@@ -52,4 +52,6 @@ do
     echo "smoothing_std=${smoothing_std[0]}" >> $oparams
     echo "perlin_noise_res=$(printf %.2f $pres)" >> $oparams
     echo "perlin_noise_abs_max=$(printf %.2f $pabs)" >> $oparams
+    echo "cc=$cc" >> $oparams
+    echo "ccnorm=$ccnorm" >> $oparams
 done

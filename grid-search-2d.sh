@@ -21,21 +21,21 @@ outdir=$5
 
 # Number of CPU processes to use. Will create an additional process if 
 # necessary for processing remaining data
-#nprocs=$(($(nproc)/3))
-nprocs=6
+nprocs=$(($(nproc)/2))
+#nprocs=2
 
 # 2D grid search space
-
-# Min and max displacement magnitude and resolution
-mindisp=2
-maxdisp=9
-resdisp=6
 
 # Min and max brain coverage x and resolution
 # x=1-y, y element [0,1]; 0=largest brain coverage
 minbc=0.01
 maxbc=0.7
-resbc=6
+resbc=8
+
+# Min and max displacement magnitude and resolution
+mindisp=2
+maxdisp=9
+resdisp=6
 
 numsims=$(($resdisp * $resbc))
 
@@ -67,7 +67,7 @@ angle_thr=7
 spline_order=1
 smoothing_std=4
 perlin_noise_res=0.03
-perlin_noise_abs_max=0.6'
+perlin_noise_abs_max=0'
 }
 
 linspacefromto(){
