@@ -1,9 +1,12 @@
 cancersimdir="/mnt/HDD3TB/code/cancer-sim"
 cancersimsearchdir="/mnt/HDD3TB/code/cancer-sim-search"
-dataset="/mnt/HDD3TB/derivatives/SAILOR_PROCESSED_MNI/001-QUUyOkRb"
 
 
-od="/home/ivar/Documents/cancer-sim-search-SAILOR_PROCESSED_MNI-001-QUUyOkRb-longitudinal-2d-2"
+#dataset="/mnt/HDD3TB/derivatives/SAILOR_PROCESSED_MNI/001-QUUyOkRb"
+dataset=$1
+
+#od="/home/ivar/Documents/cancer-sim-search-SAILOR_PROCESSED_MNI-001-QUUyOkRb-longitudinal-2d-2"
+od=$2
 
 # Grid search dimensions
 dimension=2
@@ -12,7 +15,9 @@ nprocs=$(($(nproc)/2))
 
 # Longitudinal grid search
 
-numintervals=5
+#numintervals=$(($(ls -d ${dataset}/*/ | wc -l )-1))
+numintervals=2
+echo $numintervals
 
 for ((i=1; i<=$numintervals; ++i))
 do

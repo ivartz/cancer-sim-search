@@ -27,25 +27,25 @@ nprocs=$(($(nproc)/2))
 # 3D grid search space (two first dimensions make up the first spatial dimension in the 3D grid search)
 
 # Perlin max and min resolution
-presmin=0.02
-presmax=0.1
-presres=3
+presmin=0.03
+presmax=0.05
+presres=2
 
 # Perlin noise maximum magntude (in absolute vector magnitude value)
 pabsmin=0
-pabsmax=1
-pabsres=3
+pabsmax=0.6
+pabsres=2
 
 # Min and max brain coverage x and resolution
 # x=1-y, y element [0,1]; 0=largest brain coverage
-minbc=0.01
-maxbc=0.4
-resbc=6
+minbc=0.1
+maxbc=1
+resbc=2
 
 # Min and max displacement magnitude and resolution
-mindisp=2
-maxdisp=9
-resdisp=6
+mindisp=3
+maxdisp=8
+resdisp=2
 
 if [[ $(echo "$pabsmin == 0" | bc -l) ]]; then
     numsims=$(($presres * ($pabsres-1) * $resbc * $resdisp + $resbc * $resdisp))
