@@ -9,7 +9,7 @@ dataset=$1
 od=$2
 
 # Grid search dimensions
-dimension=2
+dimension=3
 
 nprocs=$(($(nproc)/2))
 
