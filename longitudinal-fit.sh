@@ -16,7 +16,7 @@ nprocs=$(($(nproc)/2))
 # Longitudinal grid search
 
 #numintervals=$(($(ls -d ${dataset}/*/ | wc -l )-1))
-numintervals=2
+numintervals=1
 echo $numintervals
 
 for ((i=1; i<=$numintervals; ++i))
