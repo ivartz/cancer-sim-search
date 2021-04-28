@@ -1,29 +1,37 @@
-cancersimdir="/mnt/HDD3TB/code/cancer-sim"
-cancersimsearchdir="/mnt/HDD3TB/code/cancer-sim-search"
+: '
+bash longitudinal-fit.sh <patient data in> <patient data out>
+'
 
+#cancersimdir="/mnt/HDD3TB/code/cancer-sim"
+#cancersimsearchdir="/mnt/HDD3TB/code/cancer-sim-search"
+#patientdata="/mnt/HDD3TB/derivatives/SAILOR_PROCESSED_MNI/001-QUUyOkRb"
 
-#dataset="/mnt/HDD3TB/derivatives/SAILOR_PROCESSED_MNI/001-QUUyOkRb"
-dataset=$1
+patientdata=$1
 
 #od="/home/ivar/Documents/cancer-sim-search-SAILOR_PROCESSED_MNI-001-QUUyOkRb-longitudinal-2d-2"
+
 od=$2
 
-# Grid search dimensions
-dimension=3
+: '
+Grid search dimensions:
+2: Maximum tissue displacement, tumor infiltration
+3: Maximum tissue displacement, tumor infiltration and growth irregularity
+'
+#dimensions=2
+dimensions=$3
 
+# Set number of processes to use as half of the available cpu threads
 nprocs=$(($(nproc)/2))
 
 # Longitudinal grid search
 
-#numintervals=$(($(ls -d ${dataset}/*/ | wc -l )-1))
-numintervals=1
-echo $numintervals
-
+numintervals=$(($(ls -d ${patientdata}/*/ | wc -l )-1))
+#numintervals=1
 for ((i=1; i<=$numintervals; ++i))
 do
-    first=$(printf %02d $i)
-    second=$(printf %02d $((i+1)))
-    cmd="bash $cancersimsearchdir/search-timestep.sh $dataset $first $second $od/${first}_${second} $dimension"
+    first=$(printf ses-%02d $i)
+    second=$(printf ses-%02d $((i+1)))
+    cmd="bash $cancersimsearchdir/search-timestep.sh $patientdata $first $second $od/${first}_${second} $dimensions"
     eval $cmd
     echo --
 done
@@ -43,12 +51,12 @@ do
     # Start all processes
     for ((i=$k; i<$(($k + $nprocs)); ++i))
     do
-        first=$(printf %02d $i)
-        second=$(printf %02d $((i+1)))
+        first=$(printf ses-%02d $i)
+        second=$(printf ses-%02d $((i+1)))
         of="$od/${first}_${second}-fit"
-        if [[ -d $dataset/$second ]]
+        if [[ -d $patientdata/$second ]]
         then
-            cmd="bash $cancersimdir/generate-models.sh $od/params-fit-$(printf %03d $i).txt $dataset/$first/T1c.nii.gz $dataset/$first/Segmentation.nii.gz $dataset/$first/BrainExtractionMask.nii.gz $of 0 &"
+            cmd="bash $cancersimdir/generate-models.sh $od/params-fit-$(printf %03d $i).txt $patientdata/$first/T1c.nii.gz $patientdata/$first/TumorMask.nii.gz $patientdata/$first/BrainExtractionMask.nii.gz $of 0 &"
             eval $cmd
             pids[$i]=$!
         fi
@@ -60,7 +68,7 @@ do
     #
     k=$(($k + $nprocs))
 done
-
+: '
 # Delete non-optimal simulations
 for d in $(ls -d $od/*/ | sort | grep -v fit)
 do
@@ -70,7 +78,8 @@ do
     cmd="rm -rd $d"
     eval $cmd
 done
-
+'
 # Visualize more
-cmd="bash $cancersimsearchdir/mostfit-all.sh $od $dataset"
+cmd="bash $cancersimsearchdir/mostfit-all.sh $od $patientdata"
 eval $cmd
+

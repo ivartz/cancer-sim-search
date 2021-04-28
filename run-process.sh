@@ -2,7 +2,7 @@
 bash run-process.sh params.txt <out dir> <inputimg> <brainmask> <tumormask> <measureimg>
 '
 
-cancersimdir="/mnt/HDD3TB/code/cancer-sim"
+#cancersimdir="/mnt/HDD3TB/code/cancer-sim"
 
 param=$1
 mdir=$2

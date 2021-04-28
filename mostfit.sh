@@ -1,8 +1,12 @@
+: '
+bash mostfit.sh <cancer-sim-search model projections directory>
+'
+
 scriptdir=$(dirname $0)
 
-patientsimdir=$1
+simdir=$1
 
-readarray -t bestsimsdirs < <(bash $scriptdir/mostfit-sims.sh $patientsimdir)
+readarray -t bestsimsdirs < <(bash $scriptdir/mostfit-sims.sh $simdir)
 
 fname=interp-field-*mm.nii.gz
 wname=warped.nii.gz

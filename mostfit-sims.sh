@@ -20,7 +20,7 @@ do
         eval ${b[0]}=${b[1]}
     done
     fpo=$(dirname $f)
-    fp="$fpo/models-${part%.*}"
+    fp="$fpo/projections-${part%.*}"
     readarray -t sims < <(ls $fp/*/*/warped.nii.gz | sort)
     id=${idx%.*}
     fp="$(dirname ${sims[$((id-1))]})"

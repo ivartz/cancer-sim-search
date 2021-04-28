@@ -2,7 +2,6 @@ scriptdir=$(dirname $0)
 
 patientsimdir=$1
 
-#realdatadir="/mnt/HDD3TB/derivatives/SAILOR_PROCESSED_MNI/001-QUUyOkRb"
 realdatadir=$2
 
 readarray -t bestsimsdirs < <(ls -d $patientsimdir/*-fit/*/*/ | sort)
@@ -108,12 +107,12 @@ echo ----
 echo "itksnap -g ${t1cs[0]} -o ${t1cs[*]:1:${#t1cs[*]}} &"
 echo "itksnap -g ${t2s[0]} -o ${t2s[*]:1:${#t2s[*]}} &"
 echo "itksnap -g ${flairs[0]} -o ${flairs[*]:1:${#flairs[*]}} &"
-'
+
 echo ----
 echo "itksnap -g ${fields[0]} -o ${fields[*]:1:${#fields[*]}} &"
 echo "itksnap -g ${negfields[0]} -o ${negfields[*]:1:${#negfields[*]}} &"
 
-: '
+
 echo "itksnap -g ${warps[0]} -o ${warps[*]:1:${#warps[*]}} &"
 echo ----
 echo "itksnap -g ${dbmasks[0]} -o ${dbmasks[*]:1:${#dbmasks[*]}} &"
@@ -151,12 +150,20 @@ eval $cmd
 cmd="fslmaths $patientsimdir/sim.nii.gz -add $patientsimdir/iemask.nii.gz $patientsimdir/sim.nii.gz"
 echo $cmd
 eval $cmd
-cmd="fslmerge -t $patientsimdir/true.nii.gz ${t1cs[*]:1:${#t1cs[*]}}"
+#cmd="fslmerge -t $patientsimdir/true.nii.gz ${t1cs[*]:1:${#t1cs[*]}}"
+cmd="fslmerge -t $patientsimdir/true.nii.gz ${t1cs[*]}"
 echo $cmd
 eval $cmd
 cmd="fslmerge -t $patientsimdir/synth.nii.gz ${warps[*]}"
 echo $cmd
 eval $cmd
+cmd="fslmerge -t $patientsimdir/fields.nii.gz ${fields[*]}"
+echo $cmd
+eval $cmd
+cmd="fslmerge -t $patientsimdir/negfields.nii.gz ${negfields[*]}"
+echo $cmd
+eval $cmd
 echo ----
-echo "itksnap -g $patientsimdir/true.nii.gz -o $patientsimdir/synth.nii.gz $patientsimdir/sim.nii.gz $patientsimdir/normmasks.nii.gz"
+#echo "itksnap -g $patientsimdir/true.nii.gz -o $patientsimdir/synth.nii.gz $patientsimdir/sim.nii.gz $patientsimdir/normmask.nii.gz"
+echo "itksnap -g true.nii.gz -o synth.nii.gz sim.nii.gz normmask.nii.gz negfields.nii.gz"
 #'

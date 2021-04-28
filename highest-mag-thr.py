@@ -16,9 +16,10 @@ d=d[d["ccnorm"] >= thr]
 
 d2=d.copy()
 
-max_value = d["disp"].max()
-min_value = d["disp"].min()
-d2["disp"] = (d["disp"] - min_value) / (max_value - min_value) 
+d2["disp"] = d["disp"].abs()
+max_value = d2["disp"].max()
+min_value = d2["disp"].min()
+d2["disp"] = (d2["disp"] - min_value) / (max_value - min_value) 
 
 max_value = d["idf"].max()
 min_value = d["idf"].min()

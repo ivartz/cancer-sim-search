@@ -1,51 +1,24 @@
 : '
-bash search-timestep.sh <dataset> <first examination folder> <second examination folder> <outdir> <grid search dimensions>
+bash search-timestep.sh <patient data> <first examination folder> <second examination folder> <outdir> <grid search dimensions>
 '
 scriptdir=$(dirname $0)
-
-#dataset="/mnt/HDD3TB/derivatives/SAILOR_PROCESSED_MNI"
-dataset=$1
-
-#first=$(printf %02d $2)
+patientdata=$1
 first=$2
-
-#second=$(printf %02d $3)
 second=$3
-
-#outdir="/mnt/HDD3TB/derivatives/cancer-sim-search-SAILOR_PROCESSED_MNI-01-02"
 outdir=$4
-
 ndim=$5
 
-readarray -t firstdirs < <(find $dataset -type d -name $first | sort)
-readarray -t seconddirs < <(find $dataset -type d -name $second | sort)
+firstimg=$patientdata/$first/T1c.nii.gz
+brainmask=$patientdata/$first/BrainExtractionMask.nii.gz
+tumormask=$patientdata/$first/TumorMask.nii.gz
+secondimg=$patientdata/$second/T1c.nii.gz
 
-if [[ ${#firstdirs[*]} -ne ${#seconddirs[*]} ]]
-then
-    echo "Did not find all matching first and second dirs"
-    exit
-fi
+mkdircmd="mkdir -p $outdir"
+eval $mkdircmd
 
-# Assiming firstd and secondd arrays equal length
+cmd="bash $scriptdir/grid-search-${ndim}d.sh $firstimg $brainmask $tumormask $secondimg $outdir"
+eval $cmd
 
-numpatients=${#firstdirs[*]}
-
-for ((i=0; i<$numpatients; ++i))
-do
-    firstdir=${firstdirs[$i]}
-    seconddir=${seconddirs[$i]}
-    firstimg=$firstdir/T1c.nii.gz
-    brainmask=$firstdir/BrainExtractionMask.nii.gz
-    tumormask=$firstdir/Segmentation.nii.gz
-    secondimg=$seconddir/T1c.nii.gz
-    patientoutfolder=$(basename $(dirname $firstdir))
-    patientoutdir=$outdir/$patientoutfolder   
-    mkdircmd="mkdir -p $patientoutdir"
-    eval $mkdircmd
-    cmd="bash $scriptdir/grid-search-${ndim}d.sh $firstimg $brainmask $tumormask $secondimg $patientoutdir"
-    eval $cmd
-done
-
-# Collect results
-cmd="bash $scriptdir/collect-cc-dataset.sh $outdir > $outdir/results.txt"
+# Prepend time step to all grid search cross-correlation results in a new file
+cmd="bash $scriptdir/prepend-time-step-cc.sh $outdir > $outdir/results.txt"
 eval $cmd

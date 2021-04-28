@@ -1,16 +1,16 @@
 : '
-bash collect-cc
+bash collect-cc.sh <directory with model projection parts from grid search>
 '
 
 outdir=$1
 
-nmodelparts=$(ls -d $outdir/*/ | wc -l)
+nprojectionparts=$(ls -d $outdir/*/ | wc -l)
 
-for ((i=1;i<=$nmodelparts;++i)); do
+for ((i=1;i<=$nprojectionparts;++i)); do
     if [[ $i -eq 1 ]]; then
         printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n" "part" "idx" "disp" "idf" "pres" "pabs" "cc"
     fi
-    mp="$outdir/models-$i"
+    mp="$outdir/projections-$i"
     c=$mp/correlations.txt
     readarray -t paramsarr < <(find $mp -type f -name params.txt | sort)
     j=0
