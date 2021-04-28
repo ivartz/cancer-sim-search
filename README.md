@@ -7,7 +7,7 @@ Ways to find the optimal model from cancer-sim given a longitudinal pair of real
 3. Customize search parameters within `grid-search-2d.sh` or `grid-search-3d.sh` with for instance vim
 4. Customize output directory etc. in run.sh, then `bash run.sh`
 
-## Analysing results
+## Analyzing results
 A successful grid search between two MRI examinations for a patient, returns a cross-correlation measure for each model projection in a text file in the output directory specified in `run.sh` for the given patient sub-folder,  as shown below. The best fit model is automatically selected from this list according to a threshold and heuristic specified in `highest-mag-thr.py`
 ```bash
 timestep   part    idx disp    idf pres    pabs    cc
@@ -27,7 +27,8 @@ ses-01_ses-02   12  1   3.00    0.90    0.03    0   0.5338348719
 ## Search parameters
 2D or 3D parameter search as specified with `dimensions` in `run.sh`
 - 2D: Maximum tissue displacement and tumor infiltration, `grid-search-2d.sh`
-		1. Maximum tissue displacement (disp) [mm] ∈ [min, max] where max > min and both can have positive or negative  sign.
+
+        1. Maximum tissue displacement (disp) [mm] ∈ [min, max] where max > min and both can have positive or negative  sign.
 		2. Tumor infiltration, or specifically "intensity decay fraction" (idf) ∈ <0, 1], with 1 least infiltration and highest intensity decay away from the geometric center of the tumor in a radial direction.
 
 - 3D: Maximum tissue displacement, tumor infiltration and growth irregularity, `grid-search-3d.sh`
