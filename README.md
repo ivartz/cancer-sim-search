@@ -45,7 +45,7 @@ ses-01_ses-02   11  1   1.00    0.90    0.03    0   0.5477226115
 ses-01_ses-02   12  1   3.00    0.90    0.03    0   0.5338348719
 ```
 ## Search parameters
-2D or 3D parameter search as specified with `dimensions` in `run.sh`
+2D or 3D parameter search as specified with `ndims` in `run.sh`
 - 2D: Maximum tissue displacement and tumor infiltration, `grid-search-2d.sh`
 
         1. Maximum tissue displacement (disp) [mm] ∈ [min, max] where max > min and both can have positive or negative  sign.
