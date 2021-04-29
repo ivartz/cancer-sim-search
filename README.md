@@ -54,3 +54,7 @@ ses-01_ses-02   12  1   3.00    0.90    0.03    0   0.5338348719
 - 3D: Maximum tissue displacement, tumor infiltration and growth irregularity, `grid-search-3d.sh`
 
 		3. Growth irregularity, or Perlin noise resolution (pres) ∈ <0, 1], 1 least granularity and lowest resolution. Additive Perlin noise on displacement field.
+## System requirements
+Tuned to use half of the available CPU threads and with a RAM/CPU ratio of 1.5. This means that it requires at least 1.5 GB available system memory per CPU thread for half of the available CPU threads in the system. Examples with RAM/CPU=1.5:
+- 24 GB RAM / 16 CPU threads
+- 96 GB RAM / 64 CPU threads
