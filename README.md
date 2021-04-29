@@ -12,9 +12,9 @@ Growth projections from cancer-sim given longitudinal MRI scans
         ├── all-mri-coregistrated-for-each-patient.txt
         └── sub-01
             ├── ses-01
-            │   ├── Brainmask.nii.gz
+            │   ├── BrainExtractionMask.nii.gz
             │   ├── T1c.nii.gz
-            │   └── Tumormask.nii.gz
+            │   └── TumorMask.nii.gz
             └── ses-02
                 ├── T1c.nii.gz
                 └── transform0GenericAffine.mat
