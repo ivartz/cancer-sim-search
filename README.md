@@ -1,10 +1,29 @@
 # cancer-sim-search
 Growth projections from cancer-sim given longitudinal MRI scans
 
+## [BIDS](https://bids.neuroimaging.io/)-like directory structure
+```
+├── code
+│   └── github-clones-here.txt
+└── derivatives
+    ├── cancer-sim-search
+    ├── output-from-various-pipelines.txt
+    └── example-processed-dataset
+        ├── all-mri-coregistrated-for-each-patient.txt
+        └── sub-01
+            ├── ses-01
+            │   ├── Brainmask.nii.gz
+            │   ├── T1c.nii.gz
+            │   └── Tumormask.nii.gz
+            └── ses-02
+                ├── T1c.nii.gz
+                └── transform0GenericAffine.mat
+```
+
 ## How to run
 1. Generate Dockerfile, build and run container by following instructions given from `bash cancer-sim-docker.sh`
-2. Download BIDS-like datasets to rawdata or derivatives subdirectories using for instance rsync
-3. Customize search parameters within `grid-search-2d.sh` or `grid-search-3d.sh` with for instance vim
+2. Download BIDS-like datasets to rawdata or derivatives subdirectories
+3. Customize search parameters within `grid-search-2d.sh` or `grid-search-3d.sh`
 4. Customize output directory etc. in run.sh, then `bash run.sh`
 
 ## Analyzing results
