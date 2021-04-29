@@ -1,19 +1,11 @@
 : '
-bash grid-search-2d.sh <inputimg> <brainmask> <tumormask> <measureimg> <outdir>
-
-inputimg="/mnt/HDD3TB/derivatives/cancer-sim-example/derivatives/1-T1c.nii.gz"
-brainmask="/mnt/HDD3TB/derivatives/cancer-sim-example/derivatives/1-brainmask.nii.gz"
-tumormask="/mnt/HDD3TB/derivatives/cancer-sim-example/derivatives/1-tumormask.nii.gz"
-measureimg="/mnt/HDD3TB/derivatives/cancer-sim-example/derivatives/reg/2-T1c-reg.nii.gz"
-# Output directory of model projections.
-# Also used to save params.txt files for use in each process
-outdir="/mnt/HDD3TB/derivatives/cancer-sim-example/large-grid-search"
+bash grid-search-2d.sh <inputimg> <brainmask> <lesionmask> <measureimg> <outdir>
 '
 scriptdir=$(dirname $0)
 
 inputimg=$1
 brainmask=$2
-tumormask=$3
+lesionmask=$3
 measureimg=$4
 # Output directory of model projections.
 # Also used to save params.txt files for use in each process
@@ -30,12 +22,12 @@ nprocs=$(($(nproc)/2))
 # x=1-y, y element [0,1]; 0=largest brain coverage
 minif=0.01
 maxif=0.9
-resif=12
+resif=4
 
 # Min and max displacement magnitude and resolution
-mindisp=-6
-maxdisp=6
-resdisp=12
+mindisp=-5
+maxdisp=5
+resdisp=4
 
 numsims=$(($resdisp * $resif))
 
@@ -170,7 +162,7 @@ while [[ $k -lt $currentprocess ]]; do
     for ((i=$k; i<$(($k + $nprocs)); ++i)); do
         pf=$outdir/params-${i}.txt
         if [[ -f $pf ]]; then
-            cmd="bash $scriptdir/run-process.sh $pf $outdir/projections-${i} $inputimg $brainmask $tumormask $measureimg &"
+            cmd="bash $scriptdir/run-process.sh $pf $outdir/projections-${i} $inputimg $brainmask $lesionmask $measureimg &"
             eval $cmd
             pids[$i]=$!
         fi

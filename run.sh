@@ -4,6 +4,9 @@ Run grid search on longitudinal BIDS-like dataset
 dataset=/home/$USER/bidsdir/derivatives/sailor-coreg
 outdir=/home/$USER/bidsdir/derivatives/cancer-sim-search
 
+# The name of the nii.gz file to use as model generating mask
+lesion=TumorMask
+
 : '
 Grid search dimensions:
 2: Maximum tissue displacement, tumor infiltration
@@ -22,7 +25,7 @@ read -p "Press key to continue..."
 for patient in ${patients[*]}
 do 
     patientfolder=$(basename $patient)
-    cmd="bash $cancersimsearchdir/longitudinal-fit.sh ${patient%/} $outdir/$patientfolder $ndims"
+    cmd="bash $cancersimsearchdir/longitudinal-fit.sh ${patient%/} $outdir/$patientfolder $ndims $lesion"
     eval $cmd
 done
 
