@@ -9,7 +9,7 @@ bidsdir-mount
 └── derivatives
     ├── cancer-sim-search
     ├── output-from-various-pipelines.txt
-    └── example-processed-dataset
+    └── example-processed-dataset-as-input
         ├── all-mri-coregistrated-for-each-patient.txt
         └── sub-01
             ├── ses-01
