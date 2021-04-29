@@ -1,5 +1,5 @@
 # cancer-sim-search
-Growth projections from cancer-sim given longitudinal MRI scans
+Robust monitoring cancer and treatment related displacements in the brain on longitudinal MRI scans
 
 ## [BIDS](https://bids.neuroimaging.io/)-like directory structure
 ```
