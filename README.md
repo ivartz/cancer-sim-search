@@ -1,5 +1,5 @@
 # cancer-sim-search
-Ways to find the the best fit growth projections from cancer-sim given a longitudinal MRI scans
+Fit growth projections from cancer-sim given longitudinal MRI scans
 
 ## How to run
 1. Generate Dockerfile, build and run container by following instructions given from `bash cancer-sim-docker.sh`
