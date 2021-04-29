@@ -23,7 +23,7 @@ bidsdir-mount
 
 ## How to run
 1. Generate Dockerfile, build and run container by following instructions given from `bash cancer-sim-docker.sh`
-2. Download BIDS-like datasets to rawdata or derivatives subdirectories
+2. Download longitudially coregistered BIDS-like dataset to derivatives subdirectory
 3. Customize search parameters within `grid-search-2d.sh` or `grid-search-3d.sh`
 4. Customize output directory etc. in run.sh, then `bash run.sh`
 
