@@ -3,6 +3,7 @@ Growth projections from cancer-sim given longitudinal MRI scans
 
 ## [BIDS](https://bids.neuroimaging.io/)-like directory structure
 ```
+bidsdir-mount
 ├── code
 │   └── github-clones-here.txt
 └── derivatives
