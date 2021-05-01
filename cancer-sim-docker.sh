@@ -38,9 +38,12 @@ docker run -it --net=host -v $(pwd)/bidsdir:/home/$USER cancer-sim
 '
 docker build --tag=cancer-sim .
 
-# Start from here
+echo "Start from here:"
 
 echo "mkdir -p bidsdir-mount"
 
 echo "docker run -it -v $(pwd)/bidsdir-mount:/home/$USER/bidsdir --expose 8000 cancer-sim"
 
+echo "tmux"
+
+echo "cd $cancersimvizdir && python3 -m http.server"
