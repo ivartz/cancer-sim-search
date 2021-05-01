@@ -22,8 +22,11 @@ docker run --rm repronim/neurodocker:0.7.0 generate docker \
     --run "echo 'git clone https://github.com/CRAI-OUS/bidsdir' > ~/download-code.sh" \
 	--run "echo 'git clone https://github.com/ivartz/cancer-sim bidsdir/code/cancer-sim' >> ~/download-code.sh" \
 	--run "echo 'git clone https://github.com/ivartz/cancer-sim-search bidsdir/code/cancer-sim-search' >> ~/download-code.sh" \
+	--run "echo 'git clone https://github.com/ivartz/cancer-sim-viz bidsdir/code/cancer-sim-viz' >> ~/download-code.sh" \
+	--env "bidsdir=/home/$USER/bidsdir" \
 	--env "cancersimdir=/home/$USER/bidsdir/code/cancer-sim" \
 	--env "cancersimsearchdir=/home/$USER/bidsdir/code/cancer-sim-search" \
+	--env "cancersimvizdir=/home/$USER/bidsdir/code/cancer-sim-viz" \
     --run "echo 'set -g default-command /bin/bash\nset -g default-terminal "screen-256color"' > ~/.tmux.conf" \
     --run "echo 'syntax on\nset tabstop=4\nset softtabstop=4\nset shiftwidth=4\nset expandtab\nset autoindent\nset background=dark' > ~/.vimrc" \
 	--cmd bash > Dockerfile
