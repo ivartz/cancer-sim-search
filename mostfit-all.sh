@@ -4,7 +4,7 @@ patientsimdir=$1
 
 realdatadir=$2
 
-readarray -t bestsimsdirs < <(ls -d $patientsimdir/*-fit/*/*/ | sort)
+readarray -t bestsimsdirs < <(ls -d $patientsimdir/*-fit/*/*/ | sort -r)
 
 fname=interp-field-*mm.nii.gz
 nfname=interp-neg-field-*mm.nii.gz
@@ -22,7 +22,7 @@ t1cs=()
 t2s=()
 flairs=()
 
-for scandir in $(ls -d $realdatadir/*/ | sort)
+for scandir in $(ls -d $realdatadir/*/ | sort -r)
 do
     t1cs+=(${scandir}T1c.nii.gz)
     t2s+=(${scandir}T2.nii.gz)
@@ -163,9 +163,22 @@ eval $cmd
 cmd="fslmerge -t $patientsimdir/negfields.nii.gz ${negfields[*]}"
 echo $cmd
 eval $cmd
+
+# Compute pathlines and time surfaces based on start mask and estimated fields
+trackingstartmask=$(ls -d $realdatadir/*/ | sort -r | head -n 1)ContrastEnhancedMask.nii.gz
+cmd="python3 $cancersimsearchdir/make-pathlines.py $trackingstartmask $patientsimdir/fields.nii.gz $patientsimdir"
+eval $cmd
+
+# Compute max of true and synth across time
+cmd="python3 $cancersimsearchdir/reduce-max.py $patientsimdir/true.nii.gz $patientsimdir/true-max.nii.gz"
+eval $cmd
+
+cmd="python3 $cancersimsearchdir/reduce-max.py $patientsimdir/synth.nii.gz $patientsimdir/synth-max.nii.gz"
+eval $cmd
+
 echo ----
 #echo "itksnap -g $patientsimdir/true.nii.gz -o $patientsimdir/synth.nii.gz $patientsimdir/sim.nii.gz $patientsimdir/normmask.nii.gz"
-echo "itksnap -g true.nii.gz -o synth.nii.gz sim.nii.gz normmask.nii.gz negfields.nii.gz" > $patientsimdir/open.sh
+echo "itksnap -g true.nii.gz -o synth.nii.gz sim.nii.gz normmask.nii.gz negfields.nii.gz true-max.nii.gz synth-max.nii.gz" > $patientsimdir/open.sh
 chmod +x $patientsimdir/open.sh 
-echo "itksnap -g true.nii.gz -o synth.nii.gz sim.nii.gz normmask.nii.gz negfields.nii.gz"
+echo "itksnap -g true.nii.gz -o synth.nii.gz sim.nii.gz normmask.nii.gz negfields.nii.gz true-max.nii.gz synth-max.nii.gz"
 #'

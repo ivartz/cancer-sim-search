@@ -16,7 +16,7 @@ docker run --rm repronim/neurodocker:0.7.0 generate docker \
 	--miniconda \
 		create_env="cancer-sim" \
 		activate=true \
-		conda_install="python=3.9 numpy nibabel scipy pandas psutil" \
+		conda_install="python=3.9 numpy nibabel scipy pandas psutil dvc dipy" \
 		pip_install="git+https://github.com/pvigier/perlin-numpy" \
 	--workdir "/home/$USER" \
     --run "echo 'git clone https://github.com/CRAI-OUS/bidsdir' > ~/download-code.sh" \
@@ -39,5 +39,5 @@ docker build --tag=cancer-sim .
 
 echo "mkdir -p bidsdir-mount"
 
-echo "docker run -it -v $(pwd)/bidsdir-mount:/home/$USER/bidsdir cancer-sim"
+echo "docker run -it -v $(pwd)/bidsdir-mount:/home/$USER/bidsdir --expose 8000 cancer-sim"
 
