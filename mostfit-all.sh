@@ -4,7 +4,9 @@ patientsimdir=$1
 
 realdatadir=$2
 
-readarray -t bestsimsdirs < <(ls -d $patientsimdir/*-fit/*/*/ | sort -r)
+lesion=$3
+
+readarray -t bestsimsdirs < <(ls -d $patientsimdir/*-fit/*/*/ | sort)
 
 fname=interp-field-*mm.nii.gz
 nfname=interp-neg-field-*mm.nii.gz
@@ -22,7 +24,7 @@ t1cs=()
 t2s=()
 flairs=()
 
-for scandir in $(ls -d $realdatadir/*/ | sort -r)
+for scandir in $(ls -d $realdatadir/*/ | sort)
 do
     t1cs+=(${scandir}T1c.nii.gz)
     t2s+=(${scandir}T2.nii.gz)
@@ -165,7 +167,7 @@ echo $cmd
 eval $cmd
 
 # Compute pathlines and time surfaces based on start mask and estimated fields
-trackingstartmask=$(ls -d $realdatadir/*/ | sort -r | head -n 1)ContrastEnhancedMask.nii.gz
+trackingstartmask=$(ls -d $realdatadir/*/ | sort | head -n 1)$lesion.nii.gz
 cmd="python3 $cancersimsearchdir/make-pathlines.py $trackingstartmask $patientsimdir/fields.nii.gz $patientsimdir"
 eval $cmd
 

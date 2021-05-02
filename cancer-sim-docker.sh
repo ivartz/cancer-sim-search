@@ -10,7 +10,7 @@ docker run --rm repronim/neurodocker:0.7.0 generate docker \
 	--dcm2niix version=master method=source \
 	--convert3d version=1.0.0 \
 	--fsl version=6.0.3 \
-	--install less htop vim tmux rsync nload git \
+	--install less htop vim tmux rsync nload git openssh-client \
 	--run "groupadd -g $(id -g $USER) $(id -g $USER) && useradd -u $(id -u $USER) -g $(id -g $USER) --create-home --shell /bin/bash $USER" \
 	--user $USER \
 	--miniconda \

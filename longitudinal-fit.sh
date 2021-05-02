@@ -32,8 +32,8 @@ numintervals=$(($(ls -d ${patientdata}/*/ | wc -l )-1))
 #numintervals=1
 for ((i=1; i<=$numintervals; ++i))
 do
-    first=$(printf ses-%02d $(($i+1)))
-    second=$(printf ses-%02d $i)
+    first=$(printf ses-%02d $i)
+    second=$(printf ses-%02d $(($i+1)))
     cmd="bash $cancersimsearchdir/search-timestep.sh $patientdata $first $second $od/${first}_${second} $dimensions $lesion"
     eval $cmd
     echo --
@@ -54,10 +54,10 @@ do
     # Start all processes
     for ((i=$k; i<$(($k + $nprocs)); ++i))
     do
-        first=$(printf ses-%02d $(($i+1)))
-        second=$(printf ses-%02d $i)
+        first=$(printf ses-%02d $i)
+        second=$(printf ses-%02d $(($i+1)))
         of="$od/${first}_${second}-fit"
-        if [[ -d $patientdata/$first ]]
+        if [[ -d $patientdata/$second ]]
         then
             cmd="bash $cancersimdir/generate-models.sh $od/params-fit-$(printf %03d $i).txt $patientdata/$first/T1c.nii.gz $patientdata/$first/$lesion.nii.gz $patientdata/$first/BrainExtractionMask.nii.gz $of 0 &"
             eval $cmd
@@ -83,6 +83,6 @@ do
 done
 #'
 # Visualize more
-cmd="bash $cancersimsearchdir/mostfit-all.sh $od $patientdata"
+cmd="bash $cancersimsearchdir/mostfit-all.sh $od $patientdata $lesion"
 eval $cmd
 
