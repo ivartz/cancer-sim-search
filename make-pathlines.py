@@ -35,6 +35,9 @@ time_surfaces = np.expand_dims(dynamic_mask.copy(), axis=-1)
 for tx in range(0,num_components,3):
     d = fields_data[...,tx:tx+3][dynamic_mask]
     
+    # Invert the z component
+    d[...,-1] *= -1
+
     if tx > 0:
         d = np.repeat(d, counts, axis=0)
     

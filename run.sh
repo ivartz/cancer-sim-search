@@ -1,11 +1,11 @@
 : '
 Run grid search on longitudinal BIDS-like dataset
 '
-dataset=/home/$USER/bidsdir/derivatives/sailor-tests
+dataset=/home/$USER/bidsdir/derivatives/sailor-mni
 outdir=/home/$USER/bidsdir/derivatives/cancer-sim-search
 
 # The name of the nii.gz file to use as model generating mask
-lesion=Segmentation
+lesion=ContrastEnhancedMask
 
 : '
 Grid search dimensions:

@@ -180,7 +180,7 @@ eval $cmd
 
 echo ----
 #echo "itksnap -g $patientsimdir/true.nii.gz -o $patientsimdir/synth.nii.gz $patientsimdir/sim.nii.gz $patientsimdir/normmask.nii.gz"
-echo "itksnap -g true.nii.gz -o synth.nii.gz sim.nii.gz normmask.nii.gz negfields.nii.gz true-max.nii.gz synth-max.nii.gz" > $patientsimdir/open.sh
+echo "itksnap -g sim.nii.gz -o normmask.nii.gz negfields.nii.gz true-max.nii.gz synth-max.nii.gz" > $patientsimdir/open.sh
 chmod +x $patientsimdir/open.sh 
-echo "itksnap -g true.nii.gz -o synth.nii.gz sim.nii.gz normmask.nii.gz negfields.nii.gz true-max.nii.gz synth-max.nii.gz"
+echo "itksnap -g sim.nii.gz -o normmask.nii.gz negfields.nii.gz true-max.nii.gz synth-max.nii.gz"
 #'

@@ -20,14 +20,14 @@ nprocs=$(($(nproc)/2))
 
 # Min and max tumor infiltration x and resolution
 # x=1-y, y element [0,1]; 0=largest brain coverage
-minif=0.2
+minif=0.01
 maxif=0.9
-resif=2
+resif=10
 
 # Min and max displacement magnitude and resolution
-mindisp=-5
-maxdisp=-1
-resdisp=5
+mindisp=-10
+maxdisp=10
+resdisp=20
 
 numsims=$(($resdisp * $resif))
 
