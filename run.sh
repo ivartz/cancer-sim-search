@@ -29,3 +29,6 @@ do
     eval $cmd
 done
 
+# Collect final results
+cmd="bash $cancersimsearchdir/collect-fit-all.sh $dataset $outdir > $outdir/results.txt"
+eval $cmd
