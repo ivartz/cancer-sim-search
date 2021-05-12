@@ -17,8 +17,7 @@ bidsdir-mount
             │   ├── T1c.nii.gz
             │   └── TumorMask.nii.gz
             └── ses-02
-                ├── T1c.nii.gz
-                └── transform0GenericAffine.mat
+                └── T1c.nii.gz
 ```
 
 ## How to run
