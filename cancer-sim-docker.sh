@@ -17,7 +17,7 @@ docker run --rm repronim/neurodocker:0.7.0 generate docker \
 		create_env="cancer-sim" \
 		activate=true \
 		conda_install="python=3.9 numpy nibabel scipy pandas psutil dvc dvc-ssh dipy" \
-		pip_install="git+https://github.com/pvigier/perlin-numpy" \
+		pip_install="git+https://github.com/pvigier/perlin-numpy intensity-normalization" \
 	--workdir "/home/$USER" \
     --run "echo 'git clone https://github.com/CRAI-OUS/bidsdir' > ~/download-code.sh" \
 	--run "echo 'git clone https://github.com/ivartz/cancer-sim bidsdir/code/cancer-sim' >> ~/download-code.sh" \
