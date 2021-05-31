@@ -6,6 +6,8 @@ realdatadir=$2
 
 lesion=$3
 
+img=$4
+
 readarray -t bestsimsdirs < <(ls -d $patientsimdir/*-fit/*/*/ | sort)
 
 fname=interp-field-*mm.nii.gz
@@ -20,13 +22,13 @@ ioemask=interp-outer-ellipsoid-mask.nii.gz
 normmask=normal-ellipsoid-mask.nii.gz
 par=params.txt
 
-t1cs=()
+imgs=()
 t2s=()
 flairs=()
 
 for scandir in $(ls -d $realdatadir/*/ | sort)
 do
-    t1cs+=(${scandir}T1c.nii.gz)
+    imgs+=(${scandir}$img.nii.gz)
     t2s+=(${scandir}T2.nii.gz)
     flairs+=(${scandir}Flair.nii.gz)
 done
@@ -152,8 +154,10 @@ eval $cmd
 cmd="fslmaths $patientsimdir/sim.nii.gz -add $patientsimdir/iemask.nii.gz $patientsimdir/sim.nii.gz"
 echo $cmd
 eval $cmd
-#cmd="fslmerge -t $patientsimdir/true.nii.gz ${t1cs[*]:1:${#t1cs[*]}}"
-cmd="fslmerge -t $patientsimdir/true.nii.gz ${t1cs[*]}"
+cmd="fslmerge -t $patientsimdir/true-second-to-latest.nii.gz ${imgs[*]:1:${#imgs[*]}}"
+echo $cmd
+eval $cmd
+cmd="fslmerge -t $patientsimdir/true.nii.gz ${imgs[*]}"
 echo $cmd
 eval $cmd
 cmd="fslmerge -t $patientsimdir/synth.nii.gz ${warps[*]}"

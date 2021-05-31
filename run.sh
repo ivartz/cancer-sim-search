@@ -1,11 +1,16 @@
 : '
 Run grid search on longitudinal BIDS-like dataset
 '
-dataset=/home/$USER/bidsdir/derivatives/sailor-mni
-outdir=/home/$USER/bidsdir/derivatives/cancer-sim-search
+dataset=/home/$USER/bidsdir/derivatives/tests/boston-in
+outdir=/home/$USER/bidsdir/derivatives/tests/boston-out
 
-# The name of the nii.gz file to use as model generating mask
+# The name of the nii.gz file to warp in each time instance
+img=T2
+
+# The name of the nii.gz file to use as model generating mask for each time instance
 lesion=ContrastEnhancedMask
+
+# In addition to img and lesion, requires BrainExtractionMask.nii.gz within each ses folders
 
 : '
 Grid search dimensions:
@@ -25,7 +30,7 @@ read -p "Press key to continue..."
 for patient in ${patients[*]}
 do 
     patientfolder=$(basename $patient)
-    cmd="bash $cancersimsearchdir/longitudinal-fit.sh ${patient%/} $outdir/$patientfolder $ndims $lesion"
+    cmd="bash $cancersimsearchdir/longitudinal-fit.sh ${patient%/} $outdir/$patientfolder $ndims $lesion $img"
     eval $cmd
 done
 

@@ -23,6 +23,9 @@ dimensions=$3
 # Name of lesion mask to use
 lesion=$4
 
+# Name of structural MRI to use
+img=$5
+
 # Set number of processes to use as half of the available cpu threads
 nprocs=$(($(nproc)/2))
 
@@ -34,7 +37,7 @@ for ((i=1; i<=$numintervals; ++i))
 do
     first=$(printf ses-%02d $i)
     second=$(printf ses-%02d $(($i+1)))
-    cmd="bash $cancersimsearchdir/search-timestep.sh $patientdata $first $second $od/${first}_${second} $dimensions $lesion"
+    cmd="bash $cancersimsearchdir/search-timestep.sh $patientdata $first $second $od/${first}_${second} $dimensions $lesion $img"
     eval $cmd
     echo --
 done
@@ -59,7 +62,7 @@ do
         of="$od/${first}_${second}-fit"
         if [[ -d $patientdata/$second ]]
         then
-            cmd="bash $cancersimdir/generate-models.sh $od/params-fit-$(printf %03d $i).txt $patientdata/$first/T1c.nii.gz $patientdata/$first/$lesion.nii.gz $patientdata/$first/BrainExtractionMask.nii.gz $of 0 &"
+            cmd="bash $cancersimdir/generate-models.sh $od/params-fit-$(printf %03d $i).txt $patientdata/$first/$img.nii.gz $patientdata/$first/$lesion.nii.gz $patientdata/$first/BrainExtractionMask.nii.gz $of 0 &"
             eval $cmd
             pids[$i]=$!
         fi
@@ -83,6 +86,6 @@ do
 done
 #'
 # Visualize more
-cmd="bash $cancersimsearchdir/mostfit-all.sh $od $patientdata $lesion"
+cmd="bash $cancersimsearchdir/mostfit-all.sh $od $patientdata $lesion $img"
 eval $cmd
 

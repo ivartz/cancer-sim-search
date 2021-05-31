@@ -8,11 +8,12 @@ second=$3
 outdir=$4
 ndim=$5
 lesion=$6
+img=$7
 
-firstimg=$patientdata/$first/T1c.nii.gz
+firstimg=$patientdata/$first/$img.nii.gz
 brainmask=$patientdata/$first/BrainExtractionMask.nii.gz
 lesionmask=$patientdata/$first/$lesion.nii.gz
-secondimg=$patientdata/$second/T1c.nii.gz
+secondimg=$patientdata/$second/$img.nii.gz
 
 mkdircmd="mkdir -p $outdir"
 eval $mkdircmd
