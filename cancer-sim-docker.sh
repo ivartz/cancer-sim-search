@@ -24,6 +24,7 @@ docker run --rm repronim/neurodocker:0.7.0 generate docker \
 	--run "echo 'git clone https://github.com/ivartz/cancer-sim-search bidsdir/code/cancer-sim-search' >> ~/download-code.sh" \
 	--run "echo 'git clone https://github.com/ivartz/cancer-sim-viz bidsdir/code/cancer-sim-viz' >> ~/download-code.sh" \
 	--env "bidsdir=/home/$USER/bidsdir" \
+	--env "codedir=/home/$USER/bidsdir/code" \
 	--env "cancersimdir=/home/$USER/bidsdir/code/cancer-sim" \
 	--env "cancersimsearchdir=/home/$USER/bidsdir/code/cancer-sim-search" \
 	--env "cancersimvizdir=/home/$USER/bidsdir/code/cancer-sim-viz" \
