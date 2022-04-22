@@ -1,5 +1,10 @@
 # cancer-sim-search
-Robust monitoring cancer and treatment related displacements in the brain on longitudinal MRI scans. An interactive visualization of example results is available [here](https://cancer-sim.com/)
+
+[cancer-sim](https://github.com/ivartz/cancer-sim) + grid search:
+1. Data augmentation for improving deep learning lesion segmentation
+2. Model fitting to longitudinal MRI scan intervals
+
+An interactive visualization of example results for 2. is available [here](https://cancer-sim.com/)
 
 ## [BIDS](https://bids.neuroimaging.io/)-like directory structure
 ```
@@ -20,19 +25,19 @@ bidsdir-mount
                 └── T1c.nii.gz
 ```
 
-## Data augmentations for each time point examination
+## Augmenting data for each time point examination
 1. Generate Dockerfile, build and run container by following instructions given from `bash cancer-sim-docker.sh`
 2. Download BIDS-like dataset to derivatives subdirectory
 3. Customize search parameters within `grid-search-2d.sh` or `grid-search-3d.sh`
 4. Customize output directory etc. in run.sh, then `bash run.sh`
 
-## How to fit the model to each time point examination interval
+## Fitting the model to each time point examination interval
 1. Generate Dockerfile, build and run container by following instructions given from `bash cancer-sim-docker.sh`
 2. Download longitudially coregistered BIDS-like dataset to derivatives subdirectory
 3. Customize search parameters within `grid-search-2d.sh` or `grid-search-3d.sh`
 4. Customize output directory etc. in run.sh, then `bash run.sh`
 
-## Analyzing results from longitudinal assessment of model fit
+## Analyzing results from cross-correlation assessment of model fit
 A successful grid search between two MRI examinations for a patient, returns a cross-correlation measure for each model projection in a text file in the output directory specified in `run.sh` for the given patient sub-folder,  as shown below. The best fit model is automatically selected from this list according to a threshold and heuristic specified in `highest-mag-thr.py`
 ```bash
 timestep   part    idx disp    idf pres    pabs    cc
