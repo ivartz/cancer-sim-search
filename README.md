@@ -20,13 +20,19 @@ bidsdir-mount
                 └── T1c.nii.gz
 ```
 
-## How to run
+## Data augmentations for each time point examination
+1. Generate Dockerfile, build and run container by following instructions given from `bash cancer-sim-docker.sh`
+2. Download BIDS-like dataset to derivatives subdirectory
+3. Customize search parameters within `grid-search-2d.sh` or `grid-search-3d.sh`
+4. Customize output directory etc. in run.sh, then `bash run.sh`
+
+## How to fit the model to each time point examination interval
 1. Generate Dockerfile, build and run container by following instructions given from `bash cancer-sim-docker.sh`
 2. Download longitudially coregistered BIDS-like dataset to derivatives subdirectory
 3. Customize search parameters within `grid-search-2d.sh` or `grid-search-3d.sh`
 4. Customize output directory etc. in run.sh, then `bash run.sh`
 
-## Analyzing results
+## Analyzing results from longitudinal assessment of model fit
 A successful grid search between two MRI examinations for a patient, returns a cross-correlation measure for each model projection in a text file in the output directory specified in `run.sh` for the given patient sub-folder,  as shown below. The best fit model is automatically selected from this list according to a threshold and heuristic specified in `highest-mag-thr.py`
 ```bash
 timestep   part    idx disp    idf pres    pabs    cc
