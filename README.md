@@ -1,8 +1,10 @@
 # cancer-sim-search
 
+Sofware for data analysis of primary brain tumors posessing mass effect induced displacement from cancer progression and treatment.
+
 [cancer-sim](https://github.com/ivartz/cancer-sim) + grid search:
-1. Data augmentation for improving deep learning lesion segmentation
-2. Model fitting to longitudinal MRI scan intervals
+1. Data augmentation: Generating more annotated data for training deep learning lesion segmentation models
+2. Model fitting: Robustly monitor the overall growth and shrink behavior by fitting the cancer-sim model to longitudinal MRI scan intervals
 
 An interactive visualization of example results for 2. is available [here](https://cancer-sim.com/)
 
@@ -28,14 +30,14 @@ bidsdir-mount
 ## Augmenting data for each time point examination
 1. Generate Dockerfile, build and run container by following instructions given from `bash cancer-sim-docker.sh`
 2. Download BIDS-like dataset to derivatives subdirectory
-3. Customize search parameters within `grid-search-2d.sh` or `grid-search-3d.sh`
-4. Customize output directory etc. in run.sh, then `bash run.sh`
+3. Customize search parameters within `augmentation-grid-search-2d.sh` or `augmentation-grid-search-3d.sh`
+4. Customize output directory etc. in augment-dataset.sh, then `bash augment-dataset.sh`
 
 ## Fitting the model to each time point examination interval
 1. Generate Dockerfile, build and run container by following instructions given from `bash cancer-sim-docker.sh`
 2. Download longitudially coregistered BIDS-like dataset to derivatives subdirectory
-3. Customize search parameters within `grid-search-2d.sh` or `grid-search-3d.sh`
-4. Customize output directory etc. in run.sh, then `bash run.sh`
+3. Customize search parameters within `modelfit-grid-search-2d.sh` or `modelfit-grid-search-3d.sh`
+4. Customize output directory etc. in modelfit-dataset.sh, then `bash modelfit-dataset.sh`
 
 ## Analyzing results from cross-correlation assessment of model fit
 A successful grid search between two MRI examinations for a patient, returns a cross-correlation measure for each model projection in a text file in the output directory specified in `run.sh` for the given patient sub-folder,  as shown below. The best fit model is automatically selected from this list according to a threshold and heuristic specified in `highest-mag-thr.py`
