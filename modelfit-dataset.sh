@@ -1,16 +1,20 @@
 : '
-Run grid search on longitudinal BIDS-like dataset
+Fit the cancer-sim model on longitudinal BIDS-like dataset
 '
-dataset=/home/$USER/bidsdir/derivatives/tests/boston-in
-outdir=/home/$USER/bidsdir/derivatives/tests/boston-out
+dataset=/home/$USER/bidsdir/derivatives/lidia
+outdir=/home/$USER/bidsdir/derivatives/lidia-fit
 
 # The name of the nii.gz file to warp in each time instance
-img=T2
+img=flair
 
 # The name of the nii.gz file to use as model generating mask for each time instance
-lesion=ContrastEnhancedMask
+lesion=seg
 
-# In addition to img and lesion, requires BrainExtractionMask.nii.gz within each ses folders
+# The integer value of the lesion segmentation inside the $lesion file to use in modeling
+lesionval=2
+
+# The name of nii.gz file containing the brain extraction mask for each time instance
+bmask=bmask
 
 : '
 Grid search dimensions:
@@ -26,14 +30,16 @@ echo "Patients found:"
 echo ${patients[*]}
 read -p "Press key to continue..."
 
-# Grid search on the patients
+# Data augmentation on the patients
 for patient in ${patients[*]}
 do 
     patientfolder=$(basename $patient)
-    cmd="bash $cancersimsearchdir/longitudinal-fit.sh ${patient%/} $outdir/$patientfolder $ndims $lesion $img"
+    # Fitting the model to each time point examination interval
+    cmd="bash $cancersimsearchdir/longitudinal-fit.sh ${patient%/} $outdir/$patientfolder $ndims $lesion $lesionval $bmask $img"
     eval $cmd
 done
-
+: '
 # Collect final results
 cmd="bash $cancersimsearchdir/collect-fit-all.sh $dataset $outdir > $outdir/results.txt"
 eval $cmd
+'
