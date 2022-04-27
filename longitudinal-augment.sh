@@ -36,6 +36,5 @@ do
     ses=$(printf ses-%02d $i)
     cmd="bash $cancersimsearchdir/augment-timestep.sh $patientdata $ses $od/$ses $dimensions $lesion $lesionval $bmask '${mris[*]}' $minimal"
     eval $cmd
-    echo --
 done
 

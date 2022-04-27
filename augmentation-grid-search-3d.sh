@@ -51,7 +51,7 @@ if [[ $nprocs -gt $numsims ]]; then
     nprocs=$numsims
 fi
 
-echo "Number of augmentations:" $numsims
+#echo "Number of augmentations:" $numsims
 
 createparamsfile(){
     # Create <procs> number of parameter configuration files for independent runs
