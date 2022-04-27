@@ -5,8 +5,8 @@ bash augment-dataset.sh
 dataset=/home/$USER/bidsdir/derivatives/lidia
 outdir=/home/$USER/bidsdir/derivatives/lidia-aug-2
 
-# The name of the nii.gz file to warp in each time instance
-mri=flair
+# The name of the nii.gz files to warp in each time instance
+mris=(flair t1 t1c t2)
 
 # The name of the nii.gz file to use as model generating mask for each time instance
 lesion=seg
@@ -24,11 +24,11 @@ Grid search dimensions:
 '
 ndims=2
 
-# Minimal output: Only output final model displacement and deformed mri and lesion mask
+# Minimal output: Only output final model displacement and deformed mris and lesion mask
 minimal=1
 
 # Make an array of patient directories
-readarray -t patients < <(ls -d $dataset/*/ | sort)
+readarray -t patients < <(ls -d $dataset/*/ | sort -V)
 
 echo "Patients found:"
 echo ${patients[*]}
@@ -39,7 +39,7 @@ for patient in ${patients[*]}
 do 
     patientfolder=$(basename $patient)
     # Data augmentations for each time point exam
-    cmd="bash $cancersimsearchdir/longitudinal-augment.sh ${patient%/} $outdir/$patientfolder $ndims $lesion $lesionval $bmask $mri $minimal"
+    cmd="bash $cancersimsearchdir/longitudinal-augment.sh ${patient%/} $outdir/$patientfolder $ndims $lesion $lesionval $bmask '${mris[*]}' $minimal"
     eval $cmd
 done
 

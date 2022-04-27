@@ -1,11 +1,11 @@
-: '
-bash augmentation-grid-search-2d.sh <inputimg> <brainmask> <lesionmask> <lesionval> <outdir> <minimalout>
+: s'
+bash augmentation-grid-search-2d.sh <inputimgs> <brainmask> <lesionmask> <lesionval> <outdir> <minimalout>
 
 cmd="bash $scriptdir/augmentation-grid-search-${ndim}d.sh $img $brainmask $lesionmask $lesionval $outdir"
 '
 scriptdir=$(dirname $0)
 
-inputimg=$1
+inputimgs=($1)
 brainmask=$2
 lesionmask=$3
 lesionval=$4
@@ -24,12 +24,12 @@ nprocs=$(($(nproc)/2))
 # x=1-y, y element [0,1]; 0=largest brain coverage
 minif=0
 maxif=1
-resif=5
+resif=3
 
 # Min and max displacement magnitude and resolution
 mindisp=-10
 maxdisp=10
-resdisp=20
+resdisp=4
 
 numsims=$(($resdisp * $resif))
 
@@ -165,7 +165,7 @@ while [[ $k -lt $currentprocess ]]; do
     for ((i=$k; i<$(($k + $nprocs)); ++i)); do
         pf=$outdir/params-${i}.txt
         if [[ -f $pf ]]; then
-            cmd="bash $scriptdir/run-augmentation-process.sh $pf $outdir/augs-${i} $inputimg $brainmask $lesionmask $lesionval $minimal &"
+            cmd="bash $scriptdir/run-augmentation-process.sh $pf $outdir/augs-${i} '${inputimgs[*]}' $brainmask $lesionmask $lesionval $minimal &"
             eval $cmd
             pids[$i]=$!
         fi
@@ -177,6 +177,4 @@ while [[ $k -lt $currentprocess ]]; do
     #
     k=$(($k + $nprocs))
 done
-# Collect params
-cmd="bash $scriptdir/collect-params.sh $outdir > $outdir/search.txt"
-eval $cmd
+

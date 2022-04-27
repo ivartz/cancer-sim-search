@@ -1,9 +1,9 @@
 : '
-bash augmentation-grid-search-3d.sh <inputimg> <brainmask> <lesionmask> <lesionval> <outdir> <minimalout>
+bash augmentation-grid-search-3d.sh <inputimgs> <brainmask> <lesionmask> <lesionval> <outdir> <minimalout>
 '
 scriptdir=$(dirname $0)
 
-inputimg=$1
+inputimgs=($1)
 brainmask=$2
 lesionmask=$3
 lesionval=$4
@@ -200,7 +200,7 @@ while [[ $k -lt $currentprocess ]]; do
     for ((i=$k; i<$(($k + $nprocs)); ++i)); do
         pf=$outdir/params-${i}.txt
         if [[ -f $pf ]]; then
-            cmd="bash $scriptdir/run-augmentation-process.sh $pf $outdir/augs-${i} $inputimg $brainmask $lesionmask $lesionval $minimal &"
+            cmd="bash $scriptdir/run-augmentation-process.sh $pf $outdir/augs-${i} '${inputimgs[*]}' $brainmask $lesionmask $lesionval $minimal &"
             eval $cmd
             pids[$i]=$!
         fi
@@ -212,6 +212,4 @@ while [[ $k -lt $currentprocess ]]; do
     #
     k=$(($k + $nprocs))
 done
-# Collect params
-cmd="bash $scriptdir/collect-params.sh $outdir > $outdir/search.txt"
-eval $cmd
+
