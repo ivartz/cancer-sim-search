@@ -34,7 +34,7 @@ resdisp=4
 numsims=$(($resdisp * $resif))
 
 if [[ $nprocs -gt $numsims ]]; then
-    echo "The number of configurations to search is smaller than the number of processes specified. Setting numbers of processes to use as the number of configurations"
+    #echo "The number of configurations to search is smaller than the number of processes specified. Setting numbers of processes to use as the number of configurations"
     nprocs=$numsims
 fi
 

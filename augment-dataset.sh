@@ -2,8 +2,8 @@
 Run augmentations on longitudinal BIDS-like dataset
 bash augment-dataset.sh
 '
-dataset=/home/$USER/bidsdir/derivatives/lidia
-outdir=/home/$USER/bidsdir/derivatives/lidia-aug-2
+dataset=/home/$USER/bidsdir/derivatives/lidia-cancer-sim/in
+outdir=/home/$USER/bidsdir/derivatives/lidia-cancer-sim/out
 
 # The name of the nii.gz files to warp in each time instance
 mris=(flair t1 t1c t2)
@@ -31,12 +31,16 @@ minimal=1
 readarray -t patients < <(ls -d $dataset/*/ | sort -V)
 
 echo "Patients found:"
-echo ${patients[*]}
+for patient in ${patients[*]}
+do
+    echo $patient
+done
 read -p "Press key to continue..."
 
 # Data augmentation on the patients
 for patient in ${patients[*]}
 do 
+    echo $patient
     patientfolder=$(basename $patient)
     # Data augmentations for each time point exam
     cmd="bash $cancersimsearchdir/longitudinal-augment.sh ${patient%/} $outdir/$patientfolder $ndims $lesion $lesionval $bmask '${mris[*]}' $minimal"
